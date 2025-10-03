@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Aventura del Saber de Eloisa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0f4f8;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4e0ee' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .world-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top-width: 6px;
+        }
+        .world-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        }
+        .trend-up { border-color: #34d399; } /* emerald-400 */
+        .trend-stable { border-color: #fbbf24; } /* amber-400 */
+        .trend-down { border-color: #fb7185; } /* rose-400 */
+
+        .path-dot {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-800 tracking-tight">La Aventura del Saber de Eloisa</h1>
+            <p class="text-slate-500 mt-3 text-lg">Un viaje a través de los mundos del conocimiento</p>
+        </header>
+
+        <div id="adventure-map" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Los mundos se generarán aquí -->
+        </div>
+    </div>
+
+    <script>
+        const worldsData = [
+            { name: "Mundo de la Lógica", subject: "Matemática", grades: [6.3, 6.1, 6.5], icon: 'M4 7V4h16v3M5 10h14M5 13h14M5 16h14M5 19h14', color: 'blue' },
+            { name: "Reino de la Creatividad", subject: "Artes Visuales", grades: [6.7, 7.0, 6.4], icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', color: 'purple' },
+            { name: "Planeta del Ritmo", subject: "Música", grades: [6.6, 6.8, 7.0], icon: 'M9 18V5l12-2v13M9 18a4 4 0 11-4-4 4 4 0 014 4zm12-2a4 4 0 11-4-4 4 4 0 014 4z', color: 'pink' },
+            { name: "Valle del Movimiento", subject: "Educación Física", grades: [6.7, 7.0, 6.7], icon: 'M13 4h3a2 2 0 012 2v2M4 13v3a2 2 0 002 2h2M12 4a8 8 0 110 16 8 8 0 010-16z', color: 'orange' },
+            { name: "Bosque de la Vida", subject: "Ciencias Naturales", grades: [6.8, 6.4, 5.6], icon: 'M16.5 12c-1.8 0-3.3 1.5-3.3 3.3s1.5 3.3 3.3 3.3c1.8 0 3.3-1.5 3.3-3.3s-1.5-3.3-3.3-3.3zM4 14.3c0-2.8 2.2-5 5-5s5 2.2 5 5c0 1.2-.4 2.3-1.2 3.2L9 22l-3.8-4.5C4.4 16.6 4 15.5 4 14.3z', color: 'green' },
+            { name: "Ciudadela de la Invención", subject: "Tecnología", grades: [7.0, 7.0, 7.0], icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'cyan' },
+            { name: "Archipiélago del Pasado", subject: "Historia", grades: [4.7, 6.1, 6.3], icon: 'M2 21h12v-2H2v2zm5-18v16h2V3H7zm4 0v16h2V3h-2zm4 0v16h2V3h-2zM2 3h12v2H2V3z', color: 'yellow' },
+            { name: "Puente entre Culturas", subject: "Inglés", grades: [5.9, 5.3, 6.6], icon: 'M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm-1-13h2v6h-2v-6zm0 8h2v2h-2v-2z', color: 'indigo' },
+            { name: "Torre de las Palabras", subject: "Lenguaje", grades: [6.9, 6.1, 5.9], icon: 'M4 6h16M4 12h16M4 18h16', color: 'red' },
+        ];
+        
+        function getTrend(grades) {
+            const first = grades[0];
+            const last = grades[grades.length - 1];
+            if (last > first + 0.1) return 'trend-up';
+            if (last < first - 0.1) return 'trend-down';
+            return 'trend-stable';
+        }
+
+        const map = document.getElementById('adventure-map');
+
+        worldsData.sort((a,b) => b.grades.reduce((s,c)=>s+c,0) - a.grades.reduce((s,c)=>s+c,0));
+
+        worldsData.forEach(world => {
+            const trendClass = getTrend(world.grades);
+            const card = document.createElement('div');
+            card.className = `world-card bg-white rounded-xl shadow-md p-6 ${trendClass}`;
+
+            const pathPoints = world.grades.map((g, i) => {
+                const x = 20 + i * 30; // position on x-axis
+                const y = 80 - (g / 7) * 70; // position on y-axis, inverted
+                return {x, y, grade: g};
+            });
+            const pathString = pathPoints.map(p => `${p.x},${p.y}`).join(' ');
+
+            card.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-${world.color}-100 text-${world.color}-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${world.icon}"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">${world.name}</p>
+                        <h3 class="text-xl font-bold text-slate-800">${world.subject}</h3>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-lg font-bold text-slate-600">Tu Senda:</p>
+                    <div class="flex justify-around items-center mt-2 text-xl font-bold">
+                        <span class="text-slate-400">${world.grades[0]}</span>
+                        <svg class="w-6 h-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        <span class="text-slate-500">${world.grades[1]}</span>
+                        <svg class="w-6 h-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        <span class="text-slate-800 text-2xl">${world.grades[2]}</span>
+                    </div>
+                </div>
+
+                <div class="relative h-24 mt-4">
+                     <svg class="w-full h-full" viewBox="0 0 100 80">
+                        <!-- Dashed base lines -->
+                        <line x1="0" y1="10" x2="100" y2="10" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+                        <line x1="0" y1="40" x2="100" y2="40" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+                        <line x1="0" y1="70" x2="100" y2="70" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+                        
+                        <!-- Path line -->
+                        <polyline fill="none" stroke="#cbd5e1" stroke-width="2" points="${pathString}" />
+
+                        <!-- Dots for each grade -->
+                        ${pathPoints.map((p, i) => `
+                            <circle class="path-dot" cx="${p.x}" cy="${p.y}" r="4" fill="${i === 2 ? `var(--tw-color-${world.color}-500)` : '#fff'}" stroke="${i === 2 ? `var(--tw-color-${world.color}-500)` : `var(--tw-color-slate-500)`}" stroke-width="2">
+                                <title>Bimestre ${i+1}: ${p.grade}</title>
+                            </circle>
+                        `).join('')}
+                    </svg>
+                </div>
+            `;
+            map.appendChild(card);
+        });
+
+    </script>
+</body>
+</html>
